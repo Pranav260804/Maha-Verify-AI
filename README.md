@@ -12,19 +12,17 @@ Maha Verify AI is a sophisticated web application designed to automate due dilig
 
 ## 📸 Interface Previews
 
-*(Replace the placeholders below with your actual screenshot paths once uploaded to your repository)*
 
 ![Dashboard / Smart Audit](docs/<img width="1919" height="1079" alt="Screenshot 2026-04-17 112406" src="https://github.com/user-attachments/assets/5be4ad81-798d-4b7a-b9dd-555fa7a11ba1" />
 )
-*Caption: The central dashboard featuring the AI Smart Audit and Document Upload interface.*
 
 ![RERA Deep Search Results](docs/<img width="1919" height="1079" alt="Screenshot 2026-04-17 112417" src="https://github.com/user-attachments/assets/773a2234-2234-4035-8493-f5eb7d6e5909" />
 )
-*Caption: Comprehensive search results cross-referencing extracted document data with the live MahaRERA portal.*
+
 
 ![Automated Legal Opinion](docs/<img width="1919" height="1079" alt="Screenshot 2026-04-17 112729" src="https://github.com/user-attachments/assets/96d4ce59-99e5-44fa-af31-79da3d49e58a" />
 )
-*Caption: The AI-generated professional legal summary outlining detected project risks, timelines, and recommendations.*
+
 
 ---
 
