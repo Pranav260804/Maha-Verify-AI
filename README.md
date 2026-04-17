@@ -13,14 +13,14 @@ Maha Verify AI is a sophisticated web application designed to automate due dilig
 ## 📸 Interface Previews
 
 
-![Dashboard / Smart Audit](docs/<img width="1919" height="1079" alt="Screenshot 2026-04-17 112406" src="https://github.com/user-attachments/assets/5be4ad81-798d-4b7a-b9dd-555fa7a11ba1" />
+<img width="1919" height="1079" alt="Screenshot 2026-04-17 112406" src="https://github.com/user-attachments/assets/5be4ad81-798d-4b7a-b9dd-555fa7a11ba1" />
 )
 
-![RERA Deep Search Results](docs/<img width="1919" height="1079" alt="Screenshot 2026-04-17 112417" src="https://github.com/user-attachments/assets/773a2234-2234-4035-8493-f5eb7d6e5909" />
+<img width="1919" height="1079" alt="Screenshot 2026-04-17 112417" src="https://github.com/user-attachments/assets/773a2234-2234-4035-8493-f5eb7d6e5909" />
 )
 
 
-![Automated Legal Opinion](docs/<img width="1919" height="1079" alt="Screenshot 2026-04-17 112729" src="https://github.com/user-attachments/assets/96d4ce59-99e5-44fa-af31-79da3d49e58a" />
+<img width="1919" height="1079" alt="Screenshot 2026-04-17 112729" src="https://github.com/user-attachments/assets/96d4ce59-99e5-44fa-af31-79da3d49e58a" />
 )
 
 
