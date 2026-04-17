@@ -6,20 +6,37 @@
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-green)
 
-A sophisticated web application for automated due diligence on real estate projects in Maharashtra using AI-powered document analysis and RERA database verification.
+Maha Verify AI is a sophisticated web application designed to automate due diligence on real estate projects in Maharashtra. By leveraging AI-powered document analysis and real-time verification against the live MahaRERA portal, it empowers buyers, investors, and legal professionals with swift, accurate risk assessments, ensuring complete transparency before property investments.
+
+---
+
+## 📸 Interface Previews
+
+*(Replace the placeholders below with your actual screenshot paths once uploaded to your repository)*
+
+![Dashboard / Smart Audit](docs/screenshot-dashboard.png)
+*Caption: The central dashboard featuring the AI Smart Audit and Document Upload interface.*
+
+![RERA Deep Search Results](docs/screenshot-deepsearch.png)
+*Caption: Comprehensive search results cross-referencing extracted document data with the live MahaRERA portal.*
+
+![Automated Legal Opinion](docs/screenshot-legalopinion.png)
+*Caption: The AI-generated professional legal summary outlining detected project risks, timelines, and recommendations.*
+
+---
 
 ## ✨ Features
 
 | Feature | Status | Details |
 |---------|--------|---------|
-| **Smart Audit** | ✅ Complete | Upload Project Registration Certificate for AI-powered verification against live MahaRERA portal |
-| **Deep Search** | ✅ Complete | Query MahaRERA database by RERA registration number |
-| **Search History** | ✅ Complete | Track all previous audits and searches |
-| **Google OAuth** | ✅ Complete | Secure user authentication |
-| **AI Analysis** | ✅ Integrated | OpenAI-powered document text extraction |
-| **RERA Integration** | ✅ Ready | Portal scraping with 2Captcha CAPTCHA handling |
-| **Risk Assessment** | ✅ Complete | Automatic "Good to Buy" or "Risk" recommendations |
-| **Responsive Design** | ✅ Complete | Mobile, Tablet, Desktop optimized |
+| **Smart Audit** | ✅ Complete | Upload Project Registration Certificates for AI-powered verification against live MahaRERA records. |
+| **Deep Search** | ✅ Complete | Instantly query the MahaRERA database by RERA registration number. |
+| **Search History** | ✅ Complete | Track all previous audits and searches for easy reference. |
+| **Google OAuth** | ✅ Complete | Secure and seamless user authentication. |
+| **AI Analysis** | ✅ Integrated | OpenAI-powered intelligence for highly accurate document text extraction. |
+| **RERA Integration** | ✅ Ready | Live automated portal scraping with robust 2Captcha resolution handling. |
+| **Risk Assessment** | ✅ Complete | Automatic "Good to Buy" or "Risk" advisory powered by integrated Legal AI analysis. |
+| **Responsive Design** | ✅ Complete | Clean UI dynamically optimized for Mobile, Tablet, and Desktop. |
 
 ## 🚀 Quick Start
 
@@ -38,91 +55,86 @@ bash quickstart.sh
 ### 2. Configure `.env` File
 ```bash
 cp .env.example .env
-# Edit .env with your API keys
+# Edit .env with your actual API keys (Google OAuth, OpenAI, and 2Captcha)
 ```
 
 ### 3. Start Server
 ```bash
 python quickstart.py
-# Visit http://localhost:8000
+# The application will automatically start. Visit http://localhost:8000
 ```
 
 ## 📋 Tech Stack
 
 **Frontend:**
 - HTML5 / CSS3 / Vanilla JavaScript (ES6+)
-- Responsive design (Mobile, Tablet, Desktop)
-- Real-time UI state management
-- Drag-and-drop file upload
+- Responsive, intuitive User Interface
+- Real-time DOM state management
+- Seamless drag-and-drop file upload integration
 
 **Backend:**
-- FastAPI 0.104.1 (Python web framework)
-- SQLAlchemy ORM (SQLite/PostgreSQL)
+- FastAPI 0.104.1 (Python asynchronous web framework)
+- SQLAlchemy ORM (SQLite/PostgreSQL compatible)
 - Google OAuth 2.0 integration
-- OpenAI API for document analysis
-- Selenium for RERA portal automation
+- OpenAI GPT-3.5 API for document parsing and structural analysis
+- Selenium WebDriver for secure, undetectable RERA portal automation
 
 **External APIs:**
-- Google Cloud OAuth
-- OpenAI GPT (gpt-3.5-turbo)
-- MahaRERA Portal
-- 2Captcha API
+- Google Cloud OAuth Service
+- OpenAI GPT API
+- MahaRERA Public Portal
+- 2Captcha Verification API
 
 ## 📁 Project Structure
 
-```
+```text
 Maha Verify AI/
-├── index.html                # Frontend UI (complete)
-├── style.css                 # Styling & responsive (complete)
-├── app.js                    # Frontend logic (complete)
-├── requirements.txt          # Python dependencies
-├── .env.example              # Environment template
-├── SETUP.md                  # Setup guide
+├── index.html                # Frontend UI
+├── style.css                 # Styling & responsive design
+├── app.js                    # Core frontend logic & AI processing simulation
+├── requirements.txt          # Required Python dependencies
+├── .env.example              # Environment variables template
+├── SETUP.md                  # Comprehensive setup guide
 ├── README.md                 # This file
 ├── quickstart.py             # Quick start script
-├── quickstart.sh             # macOS/Linux setup
-├── quickstart.bat            # Windows setup
+├── quickstart.sh             # macOS/Linux initial setup
+├── quickstart.bat            # Windows initial setup
 │
 └── backend/
-    ├── main.py               # FastAPI entry point
-    ├── config.py             # Configuration & env vars
-    ├── auth.py               # Google OAuth & JWT
-    ├── database.py           # SQLAlchemy models
+    ├── main.py               # Core FastAPI entry point
+    ├── config.py             # Configuration & environment variable bindings
+    ├── auth.py               # Google OAuth & session handling
+    ├── database.py           # SQLAlchemy database models & schemas
     │
     ├── routes/
-    │   ├── __init__.py        # Routes package
-    │   ├── document.py        # Document analysis endpoints
-    │   ├── rera.py            # RERA portal endpoints
-    │   └── history.py         # Audit history endpoints
+    │   ├── __init__.py
+    │   ├── document.py       # API endpoints for document analysis
+    │   ├── rera.py           # API endpoints for RERA portal interactions
+    │   └── history.py        # API endpoints for retrieving search history
     │
     └── services/
-        ├── __init__.py        # Services package
-        └── rera_scraper.py    # RERA scraping with 2Captcha
-```
-│   ├── database.py      # Database models & queries
-│   └── schemas.py       # Request/Response schemas
-└── README.md            # This file
+        ├── __init__.py
+        └── rera_scraper.py   # Selenium RERA scraping integrated with 2Captcha
 ```
 
-## Setup Instructions
+## ⚙️ Setting Up
 
 ### Prerequisites
 
 - Python 3.8+
-- Node.js (for future frontend build tools)
-- Google Cloud project with OAuth credentials
-- OpenAI API key
-- 2Captcha API key
-- Tesseract OCR (for image text extraction)
+- Active Google Cloud project with OAuth API enabled
+- Valid OpenAI API Key
+- Valid 2Captcha API Key
+- Tesseract OCR (Required for legacy/image-based PDF extraction)
 
 ### 1. Clone & Setup Virtual Environment
 
 ```bash
-# Create project folder
-mkdir maha-verify-ai
-cd maha-verify-ai
+# Clone or create project folder
+git clone https://github.com/Pranav260804/Maha-Verify-AI.git
+cd Maha-Verify-AI
 
-# Create virtual environment
+# Create python virtual environment
 python -m venv venv
 
 # Activate virtual environment
@@ -138,265 +150,62 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 3. Configure Google Cloud OAuth
+### 3. Configure API Credentials
 
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project or select existing one
-3. Enable the following APIs:
-   - Google Identity Service
-   - Google OAuth 2.0
-
-4. Create OAuth 2.0 credentials:
-   - Go to "Credentials"
-   - Create "OAuth 2.0 Client IDs"
-   - Application type: Web application
-   - Authorized redirect URIs: `http://localhost:8000/auth/callback`
-   - Copy Client ID and Client Secret
-
-5. Create `.env` file in project root:
+Ensure your `.env` is fully populated. It should look like this:
 
 ```env
-# Google OAuth
+# Google OAuth Configuration
 GOOGLE_CLIENT_ID=your_client_id_here
 GOOGLE_CLIENT_SECRET=your_client_secret_here
 GOOGLE_REDIRECT_URI=http://localhost:8000/auth/callback
 
-# OpenAI
-OPENAI_API_KEY=your_openai_api_key
+# OpenAI Configuration
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_MODEL=gpt-3.5-turbo
 
-# 2Captcha
-CAPTCHA_API_KEY=your_2captcha_key
+# 2Captcha Configuration
+CAPTCHA_API_KEY=your_2captcha_api_key_here
 
-# Database
-DATABASE_URL=sqlite:///./test.db
-# Or Firestore: firebase://your-project-id
+# Database Configuration
+DATABASE_URL=sqlite:///./maha_verify.db
 
-# Server
-SECRET_KEY=your_secret_key_for_sessions
+# Server Secret
+SECRET_KEY=your_secure_randomly_generated_key
 DEBUG=True
 ```
 
-### 4. Install System Dependencies
+### 4. Run the Application
 
-**For Windows:**
-```bash
-# Install Tesseract OCR
-# Download from: https://github.com/UB-Mannheim/tesseract/wiki
-# Then add to PATH
-```
-
-**For macOS:**
-```bash
-brew install tesseract
-```
-
-**For Linux (Ubuntu/Debian):**
-```bash
-sudo apt-get install tesseract-ocr
-```
-
-### 5. Run the Application
+Start the backend server using Uvicorn:
 
 ```bash
-# Start the backend server
-python -m uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
-
-# Frontend is served at:
-# http://localhost:8000
+python -m uvicorn backend.main:app --reload --port 8000
 ```
+*Frontend is served locally. Access the application by navigating to:*
+[http://localhost:8000](http://localhost:8000)
 
-## API Endpoints
+## 🔍 Core Workflows
 
-### Authentication
-- `GET /auth/login` - Redirect to Google OAuth login
-- `GET /auth/callback` - OAuth callback handler
-- `POST /auth/logout` - Logout user
+### Smart Document Audit
+- **Strict Guidelines**: The system requires users to upload the official **Project Registration Certificate** to ensure accuracy against live portal databases.
+- **Data Flow**: Utilizes Tesseract OCR for text ingestion → OpenAI formats the legal schema structure → Selenium securely logs into the live MahaRERA portal → Verification executes matching developers, completion dates (considering official portal revisions/extensions), and registered litigations.
+- **Report Generation**: Automatically formulates a "Legal Real Estate Advisor" summary based on discrepancies and flags identified in the cross-reference audit.
 
-### Document Analysis
-- `POST /api/analyze-document` - Extract & analyze document
-  - Request: `{ "text": "extracted document text" }`
-  - Response: `{ "reraNumber": "...", "developerName": "...", ... }`
+### Deep Deep Search 
+- Allows standalone queries by verifying known RERA IDs directly against the backend scraping service without a document upload.
 
-### RERA Search
-- `GET /api/rera-data?reraNumber=P51800000001` - Get RERA project data
-  - Response: `{ "projectName": "...", "litigations": 0, ... }`
+## 🚧 Expected Future Enhancements
+1. Extended scraping configurations for complex legal litigation documents.
+2. Court database APIs (e.g., e-Courts India) integrations.
+3. React Native Mobile Application port for quick on-site verifications.
+4. Scale up the scraping micro-service onto isolated cloud containers (GCP/AWS).
 
-### User History
-- `GET /api/history` - Get user's audit/search history
-- `POST /api/history` - Save audit/search record
-- `GET /api/history/:id` - Get specific audit report
+## 🛡️ License & Disclaimers
 
-## Key Features Explained
+**MIT License** - Open for personal use and modification. See [LICENSE](LICENSE) file for more specifications.
 
-### Smart Audit Flow
-
-1. **Document Upload** (Max 200MB):
-   - **Important:** The system expects the official **Project Registration Certificate** to be uploaded. The uploaded document *must* contain the RERA registration number and essential project details to allow for accurate verification against the live portal.
-   - Supported formats: PDF, JPG, PNG, JPEG
-   - Client-side validation before upload
-   - Drag-and-drop or browse file selection
-
-2. **Text Extraction**:
-   - Uses `pdf2image` + `pytesseract` for PDFs
-   - Tesseract OCR for image files
-   - Extracts text with coordinates for smart search
-
-3. **AI Analysis**:
-   - Sends extracted text to OpenAI API
-   - Extracts: RERA number, developer name, project name, completion date
-   - Identifies potential litigations from document
-
-4. **RERA Verification**:
-   - Scrapes MahaRERA portal using Selenium
-   - Handles CAPTCHA using 2Captcha API
-   - Cross-references extracted data with official records
-
-5. **Report Generation**:
-   - Compares document vs. RERA data
-   - Flags discrepancies
-   - Generates "Good to Buy" or "Risk" recommendation
-   - Saves report linked to user's email
-
-### Deep Search (RERA No.)
-
-- Direct lookup by RERA registration number
-- Fetches current project status
-- Shows developer, timeline, approvals, litigations
-- Results saved to user's search history
-
-### Search History
-
-- Displays all past audits and searches
-- Linked to user's Google email ID
-- Shows date, project/file name, recommendation
-- Click to view detailed report
-
-## Authentication Flow
-
-```
-User → Login → Google OAuth → Grant Permissions → 
-→ Backend Verifies Token → Create Session → 
-→ Store in DB with Email ID → Redirect to App
-```
-
-## Database Schema
-
-### Users Table
-```sql
-CREATE TABLE users (
-    id TEXT PRIMARY KEY,
-    email TEXT UNIQUE,
-    name TEXT,
-    google_id TEXT,
-    created_at TIMESTAMP,
-    last_login TIMESTAMP
-);
-```
-
-### Audit History Table
-```sql
-CREATE TABLE audit_history (
-    id TEXT PRIMARY KEY,
-    user_email TEXT,
-    audit_type TEXT,  -- 'document_audit' or 'rera_search'
-    rera_number TEXT,
-    project_name TEXT,
-    recommendation TEXT,  -- 'Good to Buy' or 'Risk'
-    issues TEXT,  -- JSON array of issues
-    created_at TIMESTAMP,
-    FOREIGN KEY (user_email) REFERENCES users(email)
-);
-```
-
-## Error Handling
-
-- **Invalid File Format**: Shows user-friendly message
-- **File Size Exceeded**: Prevents upload over 200MB
-- **API Failures**: Graceful fallback with user notification
-- **RERA Not Found**: Returns "Project not found" message
-- **CAPTCHA Issues**: Retries automatically up to 3 times
-
-## Security Considerations
-
-✅ HTTPS only in production
-✅ OAuth tokens stored securely (HTTP-only cookies)
-✅ No sensitive data in frontend state
-✅ Rate limiting on API endpoints
-✅ Input validation on all endpoints
-✅ SQL injection prevention via ORM/parameterized queries
-✅ CORS configured for trusted domains only
-
-## Performance Optimizations
-
-- Frontend caching of search results
-- Backend caching of RERA data (24-hour TTL)
-- Lazy loading of history records
-- Async processing for document analysis
-- Database indexing on frequently queried fields
-
-## Troubleshooting
-
-### Issue: "RERA portal login failed"
-- Check 2Captcha API key validity
-- Verify MahaRERA portal URL hasn't changed
-- Check internet connectivity
-
-### Issue: "OCR not working"
-- Verify Tesseract is installed and in PATH
-- For Windows: Restart terminal after installation
-- For macOS/Linux: Check installation with `tesseract --version`
-
-### Issue: "OAuth redirect URI mismatch"
-- Ensure Google Cloud Console OAuth URI matches backend redirect
-- Check URL doesn't have trailing slash issues
-
-### Issue: "File upload fails"
-- Verify file is < 200MB
-- Check browser console for specific errors
-- Ensure backend `/upload` endpoint is accessible
-
-## Next Steps
-
-1. **Enhanced Litigation Detection**:
-   - Integrate with court databases
-   - Real-time litigation monitoring
-
-2. **Mobile App**:
-   - React Native or Flutter implementation
-
-3. **Advanced Analytics**:
-   - Historical trend analysis
-   - Risk scoring algorithm improvements
-
-4. **Multi-language Support**:
-   - Support for Hindi, Marathi legal documents
-
-5. **Batch Processing**:
-   - Upload multiple documents for comparison
-
-## Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
-
-## License
-
-MIT License - See LICENSE file for details
-
-## Support
-
-For issues and questions:
-- GitHub Issues: [Project Issues](https://github.com/yourusername/maha-verify-ai/issues)
-- Email: support@mahaverify.ai
-
-## Disclaimer
-
-This tool is for informational purposes. Always conduct independent legal review before making real estate decisions. Maha Verify AI is not a substitute for professional legal advice.
+**Disclaimer:** *This application is intended strictly for informational risk-assessment purposes. Maha Verify AI is actively fetching data securely but should not overwrite or act as a total substitute for professional, human-bound legal counsel.*
 
 ---
-
-**Last Updated:** April 2026
-**Version:** 1.0.0
+**Last Updated:** April 2026 | **Version:** 1.0.0
