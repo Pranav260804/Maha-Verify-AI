@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Maha-Verify AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f4c5f 0%, #097470 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 60px 50px;
+            width: 100%;
+            max-width: 450px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 48px;
+        }
+
+        .logo-brand {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0f4c5f;
+            letter-spacing: -1px;
+        }
+
+        .login-subtitle {
+            color: #666;
+            font-size: 16px;
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #0f4c5f;
+            box-shadow: 0 0 0 3px rgba(15, 76, 95, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #999;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px 20px;
+            background: linear-gradient(135deg, #0f4c5f 0%, #097470 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(15, 76, 95, 0.3);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+
+        .divider span {
+            position: relative;
+            z-index: 2;
+            background: white;
+            padding: 0 10px;
+        }
+
+        .google-btn {
+            width: 100%;
+            padding: 14px 20px;
+            background: white;
+            color: #333;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .google-btn:hover {
+            border-color: #0f4c5f;
+            background: #f8f8f8;
+        }
+
+        .google-icon {
+            font-size: 20px;
+        }
+
+        .error-message {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+            animation: shake 0.3s ease;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f0f0f0;
+            border-top: 3px solid #0f4c5f;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 40px 25px;
+            }
+
+            .logo-brand {
+                font-size: 28px;
+            }
+
+            .login-subtitle {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Login Header -->
+        <div class="login-header">
+            <div class="logo-section">
+                <span class="logo-icon">🏛️</span>
+                <div class="logo-brand">Maha-Verify</div>
+            </div>
+            <p class="login-subtitle">
+                AI-Powered Real Estate Due Diligence
+            </p>
+        </div>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="error-message"></div>
+
+        <!-- Login Form -->
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input
+                    type="email"
+                    id="email"
+                    class="form-input"
+                    placeholder="you@example.com"
+                    required
+                    value="demo@mahaverify.ai"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    class="form-input"
+                    placeholder="Enter your password"
+                    value="demo123"
+                >
+            </div>
+
+            <div class="loading" id="loadingIndicator">
+                <div class="spinner"></div>
+                <p>Signing in...</p>
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">
+                Sign In
+            </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="divider">
+            <span>Or continue with</span>
+        </div>
+
+        <!-- Google Login -->
+        <button type="button" class="google-btn" onclick="handleGoogleLogin()">
+            <span class="google-icon">🔐</span>
+            <span>Google Account</span>
+        </button>
+    </div>
+
+    <script>
+        // Handle form submission
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMessage');
+            const loadingDiv = document.getElementById('loadingIndicator');
+            const loginBtn = document.getElementById('loginBtn');
+
+            // Clear error
+            errorMsg.textContent = '';
+            errorMsg.classList.remove('show');
+
+            // Show loading
+            loadingDiv.classList.add('show');
+            loginBtn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                // Simple demo validation
+                if (email === 'demo@mahaverify.ai' && password === 'demo123') {
+                    // Login successful
+                    const userData = {
+                        email: email,
+                        name: 'Demo User',
+                        token: 'demo-token-' + Date.now()
+                    };
+
+                    localStorage.setItem('mahaverfyAuth', JSON.stringify(userData));
+                    localStorage.setItem('loginTimestamp', new Date().toISOString());
+
+                    // Redirect to main app
+                    window.location.href = '/dashboard';
+                } else {
+                    // Login failed
+                    errorMsg.textContent = '❌ Invalid email or password. Try demo@mahaverify.ai / demo123';
+                    errorMsg.classList.add('show');
+                    loadingDiv.classList.remove('show');
+                    loginBtn.disabled = false;
+                }
+            }, 800);
+        }
+
+        function handleGoogleLogin() {
+            // Show loading
+            const loadingDiv = document.getElementById('loadingIndicator');
+            loadingDiv.classList.add('show');
+            const googleBtn = document.querySelector('.google-btn');
+            googleBtn.disabled = true;
+
+            // Simulate Google OAuth login
+            setTimeout(() => {
+                const userData = {
+                    email: 'google-demo@mahaverify.ai',
+                    name: 'Google User',
+                    token: 'google-token-' + Date.now()
+                };
+
+                localStorage.setItem('mahaverfyAuth', JSON.stringify(userData));
+                localStorage.setItem('loginTimestamp', new Date().toISOString());
+
+                // Redirect to main app
+                window.location.href = '/dashboard';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

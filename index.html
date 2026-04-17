@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maha-Verify AI | Elite Due Diligence</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Hide content until authenticated */
+        main {
+            display: none;
+        }
+        
+        .auth-check {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f4c5f 0%, #097470 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .auth-check-content {
+            text-align: center;
+            color: white;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body style="opacity: 0; transition: opacity 0.3s ease;">
+    <!-- Auth Check Overlay (removed via JS after auth) -->
+    <div id="authCheckOverlay" class="auth-check">
+        <div class="auth-check-content">
+            <div class="spinner"></div>
+            <p>Verifying your session...</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🏛️</span>
+                    <h1>Maha-Verify</h1>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()">
+                    <span class="logout-icon">🚪</span> Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Tab Navigation -->
+            <nav class="tabs-container">
+                <button class="tab active" id="smart-audit-tab" onclick="switchTab('smart-audit')">
+                    <span class="tab-icon">✓</span> Smart Audit
+                </button>
+                <button class="tab" id="deep-search-tab" onclick="switchTab('deep-search')">
+                    <span class="tab-icon">●</span> Deep Search
+                </button>
+                <button class="tab" id="past-reports-tab" onclick="switchTab('past-reports')">
+                    <span class="tab-icon">📋</span> Past Reports
+                </button>
+            </nav>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Smart Audit Tab -->
+                <div id="smart-audit" class="tab-pane active">
+                    <section class="upload-section">
+                        <div class="section-header">
+                            <span class="section-icon">📄</span>
+                            <h2>Upload Legal Document</h2>
+                            <button class="info-btn" title="Upload a legal document for AI-powered due diligence analysis">ℹ️</button>
+                        </div>
+
+                        <!-- File Upload Area -->
+                        <div class="file-upload-container">
+                            <div class="drop-zone" id="dropZone" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                                <div class="drop-zone-content">
+                                    <div class="upload-icon">☁️</div>
+                                    <p class="drop-text">Drag and drop file here</p>
+                                    <p class="file-info">Limit 200MB per file • PDF, JPG, PNG, JPEG</p>
+                                </div>
+                            </div>
+
+                            <button class="browse-btn" onclick="document.getElementById('fileInput').click()">
+                                Browse files
+                            </button>
+                            <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileSelect(event)" style="display: none;">
+                        </div>
+
+                        <!-- File Preview -->
+                        <div id="filePreview" class="file-preview" style="display: none;">
+                            <p id="fileName" class="file-name"></p>
+                            <button class="remove-file-btn" onclick="removeFile()">✕ Remove</button>
+                        </div>
+
+                        <!-- Run Audit Button -->
+                        <button class="run-audit-btn" id="runAuditBtn" onclick="runSmartAudit()" disabled>
+                            <span class="audit-icon">⚙️</span> Run Smart Audit
+                        </button>
+                    </section>
+
+                    <!-- Results Section (Hidden until audit runs) -->
+                    <div id="resultsSection" class="results-section" style="display: none;">
+                        <div class="results-header">
+                            <h3>Audit Results</h3>
+                        </div>
+                        <div id="auditResults" class="audit-results"></div>
+                    </div>
+                </div>
+
+                <!-- Deep Search Tab -->
+                <div id="deep-search" class="tab-pane">
+                    <section class="search-section">
+                        <div class="section-header">
+                            <span class="section-icon">🔍</span>
+                            <h2>Search using RERA No.</h2>
+                        </div>
+
+                        <div class="search-input-group">
+                            <input
+                                type="text"
+                                id="reraInput"
+                                placeholder="Enter RERA Registration Number"
+                                class="search-input"
+                                onkeypress="handleSearchKeypress(event)"
+                            >
+                            <button class="search-btn" onclick="performReraSearch()">Search</button>
+                        </div>
+
+                        <div id="searchResults" class="search-results" style="display: none;">
+                            <div id="searchResultsContent"></div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Past Reports Tab -->
+                <div id="past-reports" class="tab-pane">
+                    <section class="reports-section">
+                        <div class="section-header">
+                            <span class="section-icon">📊</span>
+                            <h2>Search History</h2>
+                        </div>
+
+                        <div id="historyContainer" class="history-container">
+                            <p class="no-history">No previous audits or searches found.</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+            <div class="spinner-content">
+                <div class="spinner"></div>
+                <p id="loadingText">Processing your request...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
