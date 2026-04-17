@@ -193,7 +193,7 @@ python -m uvicorn backend.main:app --reload --port 8000
 - **Data Flow**: Utilizes Tesseract OCR for text ingestion → OpenAI formats the legal schema structure → Selenium securely logs into the live MahaRERA portal → Verification executes matching developers, completion dates (considering official portal revisions/extensions), and registered litigations.
 - **Report Generation**: Automatically formulates a "Legal Real Estate Advisor" summary based on discrepancies and flags identified in the cross-reference audit.
 
-### Deep Deep Search 
+### Deep Search 
 - Allows standalone queries by verifying known RERA IDs directly against the backend scraping service without a document upload.
 
 ## 🚧 Expected Future Enhancements
