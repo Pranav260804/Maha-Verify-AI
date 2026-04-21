@@ -486,7 +486,15 @@ async function generateAuditReport(aiAnalysis, reraData) {
         issues: issues,
         recommendation: recommendation,
         legalOpinion: legalOpinion,
-        generatedAt: new Date().toISOString()
+        generatedAt: new Date().toISOString(),
+        deltaData: {
+            docDev: aiAnalysis.developerName || "Unknown",
+            reraDev: reraData.developerName || "Unknown",
+            docDate: aiAnalysis.completionDate || "Unknown",
+            reraDate: reraData.revisedCompletionDate || reraData.completionDate || "Unknown",
+            docLits: aiLits,
+            reraLits: reraLits
+        }
     };
 }
 
@@ -559,6 +567,44 @@ function displayAuditResults(report) {
                 <strong>Completion Date:</strong> ${report.completionDate}
             </div>
         </div>
+
+        ${report.deltaData ? `
+        <div class="result-card" style="overflow-x:auto;">
+            <div class="result-title">🔍 Smart Delta Comparison</div>
+            <div class="result-description">
+                <table class="delta-table" style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <th style="padding: 8px;">Parameter</th>
+                            <th style="padding: 8px;">Uploaded Document</th>
+                            <th style="padding: 8px;">MahaRERA Portal</th>
+                            <th style="padding: 8px;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 8px;">Developer</td>
+                            <td style="padding: 8px;">${report.deltaData.docDev}</td>
+                            <td style="padding: 8px;">${report.deltaData.reraDev}</td>
+                            <td style="padding: 8px;"><span style="color: ${report.developerVerified ? 'var(--success-green)' : 'var(--accent-red)'}; font-weight: bold;">${report.developerVerified ? 'MATCH' : 'MISMATCH'}</span></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 8px;">Possession Date</td>
+                            <td style="padding: 8px;">${report.deltaData.docDate}</td>
+                            <td style="padding: 8px;">${report.deltaData.reraDate}</td>
+                            <td style="padding: 8px;"><span style="color: ${report.dateVerified ? 'var(--success-green)' : 'var(--accent-red)'}; font-weight: bold;">${report.dateVerified ? 'MATCH' : 'DELAYED / MISMATCH'}</span></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;">Litigations</td>
+                            <td style="padding: 8px;">${report.deltaData.docLits}</td>
+                            <td style="padding: 8px;">${report.deltaData.reraLits}</td>
+                            <td style="padding: 8px;"><span style="color: ${(report.deltaData.docLits + report.deltaData.reraLits) > 0 ? 'var(--accent-red)' : 'var(--success-green)'}; font-weight: bold;">${(report.deltaData.docLits + report.deltaData.reraLits) > 0 ? 'RISK' : 'CLEAR'}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        ` : ''}
 
         <div class="result-card ${report.developerVerified ? 'good' : 'risk'}">
             <div class="result-title">${report.developerVerified ? '✓' : '✕'} Developer Verification</div>
