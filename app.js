@@ -648,8 +648,112 @@ function displayAuditResults(report) {
         `;
     }
 
+    window.currentAuditReport = report;
+    resultsHTML += `
+        <div style="margin-top: 30px; text-align: center;">
+            <button class="primary-btn" onclick="generateLegalReport()" style="width: auto; padding: 15px 30px; font-size: 16px; font-weight: bold; background: var(--accent-gold); color: #000; border-radius: 8px; cursor: pointer; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;">
+                📄 Generate Full Professional Legal Report
+            </button>
+            <div style="margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.6);">AI-Generated comprehensive legal advisory memo for buyers/agents.</div>
+        </div>
+    `;
+
     auditResults.innerHTML = resultsHTML;
     resultsSection.style.display = 'block';
+}
+
+async function generateLegalReport() {
+    if (!window.currentAuditReport) return;
+    
+    try {
+        showLoading('Generating professional legal report...');
+        
+        const response = await fetch('/api/generate-legal-report', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${appState.user?.token}`
+            },
+            body: JSON.stringify({ audit_data: window.currentAuditReport })
+        });
+        
+        let markdownText = "Error generating report.";
+        if (response.ok) {
+            const result = await response.json();
+            markdownText = result.data?.markdown || "Report generation failed.";
+        } else {
+            console.error("API response not ok", response.status);
+            // demo fallback
+            markdownText = `# Professional Legal Advisory Report\n\n**Date:** ${new Date().toLocaleDateString()}\n**Subject Property:** ${window.currentAuditReport.projectName}\n**Developer:** ${window.currentAuditReport.developerName}\n**RERA Registration:** ${window.currentAuditReport.reraNumber}\n\n## 1. Executive Summary\nBased on the preliminary analysis, the property has a recommendation status of **${window.currentAuditReport.recommendation}**.\n\n## 2. Compliance Analysis\n- **Developer Verification:** ${window.currentAuditReport.developerVerified ? "Matched" : "Discrepancy Found"}\n- **Timeline Verification:** ${window.currentAuditReport.dateVerified ? "Matched" : "Discrepancy Found"}\n\n## 3. Risk Assessment\nThere are currently **${window.currentAuditReport.litigations}** active litigations associated with this project.\n\n## 4. Final Legal Opinion\n${window.currentAuditReport.legalOpinion}\n\n***Disclaimer:*** *This is an automated demo report due to an API disruption.*`;
+        }
+        
+        const reportWindow = window.open('', '_blank');
+        reportWindow.document.write(`
+            <html>
+            <head>
+                <title>Legal Advisory Report - ${window.currentAuditReport.projectName}</title>
+                <style>
+                    body { font-family: 'Georgia', serif; line-height: 1.6; color: #333; max-width: 800px; margin: 40px auto; padding: 20px; }
+                    h1 { color: #1a1a1a; border-bottom: 2px solid #333; padding-bottom: 10px; margin-top:20px; }
+                    h2 { color: #2c3e50; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+                    h3 { color: #34495e; margin-top: 20px; }
+                    .header { text-align: center; margin-bottom: 40px; }
+                    .header h1 { border: none; margin-bottom: 5px; padding-bottom: 0; }
+                    .header h3 { color: #7f8c8d; margin-top: 5px; font-weight: normal; }
+                    .footer { margin-top: 50px; font-size: 12px; text-align: center; color: #7f8c8d; border-top: 1px solid #eee; padding-top: 20px; }
+                    .report-meta { display: flex; justify-content: space-between; margin-bottom: 30px; font-weight: bold; background: #f9f9f9; padding: 15px; border-radius: 5px; border: 1px solid #e0e0e0; }
+                    .btn-print { display: block; width: 220px; margin: 20px auto; padding: 12px; background: #2c3e50; color: white; border: none; font-size: 16px; font-weight:bold; cursor: pointer; text-align: center; text-decoration: none; border-radius: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: background 0.3s; }
+                    .btn-print:hover { background: #1a252f; }
+                    .content { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.03); border: 1px solid #eaeaea; }
+                    ul { padding-left: 20px; }
+                    li { margin-bottom: 8px; }
+                    strong { color: #000; }
+                    @media print { 
+                        .btn-print { display: none; } 
+                        body { padding: 0; margin: 0; max-width: 100%; box-shadow: none; } 
+                        .content { box-shadow: none; border: none; padding: 0; }
+                    }
+                </style>
+            </head>
+            <body>
+                <button class="btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
+                <div class="header">
+                    <h1>Maha Verify AI</h1>
+                    <h3>Professional Legal Advisory Report</h3>
+                </div>
+                <div class="report-meta">
+                    <span>Project: ${window.currentAuditReport.projectName}</span>
+                    <span>Date: ${new Date().toLocaleDateString()}</span>
+                </div>
+                <div class="content">
+                    ${formatMarkdownSimple(markdownText)}
+                </div>
+                <div class="footer">
+                    Generated by Maha Verify AI System. This is an AI-assisted legal analysis intended as an advisory document and does not constitute formal legal representation.
+                </div>
+            </body>
+            </html>
+        `);
+        reportWindow.document.close();
+    } catch (error) {
+        console.error('Error generating report:', error);
+        alert('Failed to generate the report. Please try again.');
+    } finally {
+        hideLoading();
+    }
+}
+
+function formatMarkdownSimple(text) {
+    if (!text) return '';
+    return text
+        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+        .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+        .replace(/^\- (.*$)/gim, '<ul><li>$1</li></ul>')
+        .replace(/<\/ul>\n<ul>/gim, '')
+        .replace(/\n/g, '<br>');
 }
 
 // RERA Search

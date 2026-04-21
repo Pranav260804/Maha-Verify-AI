@@ -25,6 +25,10 @@ class DocumentTextRequest(BaseModel):
     """Request model for document text analysis"""
     text: str
 
+class ReportRequest(BaseModel):
+    """Request model for generating full legal report"""
+    audit_data: dict
+
 
 @router.post("/analyze-document")
 async def analyze_document(
@@ -70,6 +74,105 @@ async def analyze_document(
             }
         })
 
+
+@router.post("/generate-legal-report")
+async def generate_legal_report(
+    request: ReportRequest,
+    user_id: str = Depends(verify_token)
+):
+    """
+    Generate a full professional legal report based on audit data using OpenAI
+    """
+    try:
+        data = request.audit_data
+        logger.info(f"Generating legal report for RERA No: {data.get('reraNumber')}")
+        
+        prompt = f"""
+        You are an expert Real Estate Legal Advisor specializing in Maharashtra RERA (Real Estate Regulatory Authority) compliance.
+        Make a comprehensive, professional legal report on the property based on the following audit data. The report is intended for a buyer.
+        
+        It should include:
+        1. Executive Summary (Clear recommendation: {data.get('recommendation')})
+        2. Property Details (Project: {data.get('projectName')}, Developer: {data.get('developerName')}, RERA No: {data.get('reraNumber')})
+        3. Compliance Analysis (Status of developer and timelines)
+        4. Risk Assessment & Litigations (There are {data.get('litigations')} litigations reported)
+        5. Smart Delta Findings (Differences between uploaded document and RERA portal)
+        6. Final Legal Opinion & Next Steps
+        
+        Here is the detailed data from our system:
+        {data}
+        
+        Write the response in clean, professional Markdown format only. Do not use JSON. Make it read like a formal legal advisory memo.
+        """
+
+        try:
+            # Try new OpenAI API format (v1.0.0+)
+            from openai import OpenAI
+            client = OpenAI(api_key=settings.OPENAI_API_KEY)
+            
+            response = client.chat.completions.create(
+                model=settings.OPENAI_MODEL,
+                messages=[
+                    {"role": "system", "content": "You are an expert Real Estate Legal Advisor. Return professional Markdown documentation."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.4,
+            )
+            
+            report_text = response.choices[0].message.content.strip()
+            
+        except Exception as e:
+            logger.error(f"New OpenAI API failed: {str(e)}, trying old format...")
+            # Fallback: try old API format
+            import openai
+            response = openai.ChatCompletion.create(
+                model=settings.OPENAI_MODEL,
+                messages=[
+                    {"role": "system", "content": "You are an expert Real Estate Legal Advisor. Return professional Markdown documentation."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.4,
+            )
+            report_text = response.choices[0].message.content.strip()
+            
+        return JSONResponse(content={
+            "status": "success",
+            "data": {
+                "markdown": report_text
+            }
+        })
+
+    except Exception as e:
+        logger.error(f"Generate report error: {str(e)}", exc_info=True)
+        # Fallback dummy report in case of failure
+        demo_markdown = f"""# Professional Legal Advisory Report
+
+**Date:** 2026-04-22
+**Subject Property:** {request.audit_data.get('projectName', 'Unknown')}
+**Developer:** {request.audit_data.get('developerName', 'Unknown')}
+**RERA Registration:** {request.audit_data.get('reraNumber', 'Unknown')}
+
+## 1. Executive Summary
+Based on the preliminary analysis, the property has a recommendation status of **{request.audit_data.get('recommendation', 'Review Needed')}**.
+
+## 2. Compliance Analysis
+- **Developer Verification:** {"Matched" if request.audit_data.get('developerVerified') else "Discrepancy Found"}
+- **Timeline Verification:** {"Matched" if request.audit_data.get('dateVerified') else "Discrepancy Found"}
+
+## 3. Risk Assessment
+There are currently **{request.audit_data.get('litigations', 0)}** active litigations associated with this project.
+
+## 4. Final Legal Opinion
+{request.audit_data.get('legalOpinion', 'Proceed with caution and consult further with legal counsel.')}
+
+***Disclaimer:*** *This is an automated demo report due to an API disruption.*
+"""
+        return JSONResponse(content={
+            "status": "success",
+            "data": {
+                "markdown": demo_markdown
+            }
+        })
 
 @router.post("/extract-text")
 async def extract_text(
