@@ -423,14 +423,25 @@ function generateMockReraData(reraNumber) {
     };
 }
 
+// Helper for developer name match
+function areNamesSimilar(name1, name2) {
+    if (!name1 || !name2) return false;
+    const n1 = name1.replace(/[^a-z0-9]/gi, '').toLowerCase();
+    const n2 = name2.replace(/[^a-z0-9]/gi, '').toLowerCase();
+    if (n1.length < 5 || n2.length < 5) return n1 === n2;
+    return n1.includes(n2) || n2.includes(n1);
+}
+
 // Generate Audit Report
 async function generateAuditReport(aiAnalysis, reraData) {
-    const litigationRisk = aiAnalysis.litigations > 0 || reraData.litigations > 0;
+    const aiLits = parseInt(aiAnalysis.litigations) || 0;
+    const reraLits = parseInt(reraData.litigations) || 0;
+    const litigationRisk = aiLits > 0 || reraLits > 0;
     
     // For demo purposes, ensure perfect match if it's our demo RERA
     const isOurDemo = aiAnalysis.reraNumber === 'P52000001349';
     
-    const developerMatch = isOurDemo ? true : aiAnalysis.developerName.trim().toLowerCase() === reraData.developerName.trim().toLowerCase();
+    const developerMatch = isOurDemo ? true : areNamesSimilar(aiAnalysis.developerName, reraData.developerName);
     const dateMatch = isOurDemo ? true : validateCompletionDate(aiAnalysis.completionDate, reraData.completionDate, reraData.revisedCompletionDate);
 
     const issues = [];
@@ -442,7 +453,7 @@ async function generateAuditReport(aiAnalysis, reraData) {
             issues.push('Completion date discrepancy detected');
         }
     }
-    if (litigationRisk) issues.push(`${aiAnalysis.litigations + reraData.litigations} litigation(s) found`);
+    if (litigationRisk) issues.push(`${aiLits + reraLits} litigation(s) found`);
 
     const recommendation = issues.length === 0 ? 'Good to Buy' : 'Risk';
 
@@ -480,21 +491,43 @@ async function generateAuditReport(aiAnalysis, reraData) {
 }
 
 function validateCompletionDate(docDate, reraDate, revisedReraDate) {
+    if (!docDate) return false;
+    
+    // Direct string comparison fallback
+    const normalizeDateStr = (d) => d ? d.replace(/[^a-z0-9]/gi, '').toLowerCase() : '';
+    const docStr = normalizeDateStr(docDate);
+    if (docStr === normalizeDateStr(reraDate) || docStr === normalizeDateStr(revisedReraDate)) {
+        return true;
+    }
+
     try {
         const date1 = new Date(docDate);
+        if (isNaN(date1.getTime())) {
+            // Check if year matches as a fuzzy fallback
+            const yearMatch = docDate.match(/\d{4}/);
+            if (yearMatch) {
+                if (reraDate && reraDate.includes(yearMatch[0])) return true;
+                if (revisedReraDate && revisedReraDate.includes(yearMatch[0])) return true;
+            }
+            return false;
+        }
         
         let matchOriginal = false;
         if (reraDate && reraDate !== 'Unknown') {
             const date2 = new Date(reraDate);
-            const dayDiff = Math.abs((date1 - date2) / (1000 * 60 * 60 * 24));
-            matchOriginal = dayDiff <= 30;
+            if (!isNaN(date2.getTime())) {
+                const dayDiff = Math.abs((date1 - date2) / (1000 * 60 * 60 * 24));
+                matchOriginal = dayDiff <= 60; // 60 days buffer
+            }
         }
 
         let matchRevised = false;
         if (revisedReraDate && revisedReraDate !== 'Unknown') {
             const date3 = new Date(revisedReraDate);
-            const dayDiffRev = Math.abs((date1 - date3) / (1000 * 60 * 60 * 24));
-            matchRevised = dayDiffRev <= 30;
+            if (!isNaN(date3.getTime())) {
+                const dayDiffRev = Math.abs((date1 - date3) / (1000 * 60 * 60 * 24));
+                matchRevised = dayDiffRev <= 60;
+            }
         }
         
         return matchOriginal || matchRevised;
