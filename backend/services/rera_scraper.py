@@ -7,6 +7,11 @@ import asyncio
 from typing import Dict, List, Optional
 import aiohttp
 import undetected_chromedriver as uc
+
+# Patch uc.Chrome.__del__ to prevent WinError 6 on Windows during shutdown
+if hasattr(uc.Chrome, "__del__"):
+    uc.Chrome.__del__ = lambda self: None
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
