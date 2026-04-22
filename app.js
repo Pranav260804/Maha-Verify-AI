@@ -348,7 +348,15 @@ function generateDemoReport() {
         issues: [],
         recommendation: 'Good to Buy',
         legalOpinion: 'As a virtual legal advisor, based on the records analyzed, there are no immediate red flags. Proceeding with caution but the legal standing appears solid.',
-        generatedAt: new Date().toISOString()
+                generatedAt: new Date().toISOString(),
+        deltaData: {
+            docDev: 'Shah Group Builders Ltd.',
+            reraDev: 'Shah Group Builders Ltd.',
+            docDate: '2025-12-31',
+            reraDate: '2025-12-31',
+            docLits: 0,
+            reraLits: 0
+        }
     };
 }
 // Fetch RERA Data
